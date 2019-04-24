@@ -2,7 +2,9 @@
   "name": "reactgame",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8080",
   "dependencies": {
+    "axios": "^0.18.0",
     "nuka-carousel": "^4.5.4",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
