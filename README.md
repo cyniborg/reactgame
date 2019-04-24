@@ -8,7 +8,6 @@ With this project I wish to create a SPA that is also a game. This game is a bas
 1. First the app fetches the genres. All the genres are then listed on the landing page. Each genre has an unique id that helps in fetching the questions of that genre. As the first step a user has to select the genre.
 1. After selecting the genre, the user is then presented with the game screen where the Question and its options are rendered dynamically.
 
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
