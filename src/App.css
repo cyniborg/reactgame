@@ -189,15 +189,6 @@ body {
   padding: 1em;
 }
 
-.options-container>div[class^="option-"] {
-  -webkit-box-flex: 0;
-  -ms-flex: 0 0 25%;
-  flex: 0 0 21%;
-  max-width: 21%;
-  max-height: 100%;
-  margin: 1.2em;
-}
-
 
 div[class^="section-"] {
   width: 20%;
@@ -240,6 +231,7 @@ div[class^="section-"]:hover {
 .game-dash {
   display: flex;
   justify-content: space-around;
+  align-content: center;
 }
 
 .yellow {
@@ -278,11 +270,11 @@ div[class^="opt-"] {
   background-color: #f4f4f4;
 }
 
-div[class^="opt-"] > div {
+div[class^="opt-"]>div {
   padding: 20px;
 }
 
-.hint-container{
+.hint-container {
   position: absolute;
   top: 0;
   left: 0;
@@ -290,13 +282,102 @@ div[class^="opt-"] > div {
   height: 100%;
   background-color: rgba(244, 244, 244, 0.9);
 }
-.hint{
+
+.hint {
   width: 75%;
   margin: 25px auto;
   background-color: whitesmoke;
   padding: 25px;
   overflow-y: scroll;
 }
+
+.level,
+.score,
+.Hhint {
+  padding: 10px 20px;
+  border-radius: 15px;
+  color: white;
+  text-align: center;
+  filter: saturate(20);
+}
+
+
+/*Animations from animate css*/
+
+@keyframes flipInY {
+  from {
+    transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+    animation-timing-function: ease-in;
+    opacity: 0;
+  }
+
+  40% {
+    transform: perspective(400px) rotate3d(0, 1, 0, -20deg);
+    animation-timing-function: ease-in;
+  }
+
+  60% {
+    transform: perspective(400px) rotate3d(0, 1, 0, 10deg);
+    opacity: 1;
+  }
+
+  80% {
+    transform: perspective(400px) rotate3d(0, 1, 0, -5deg);
+  }
+
+  to {
+    transform: perspective(400px);
+  }
+}
+
+.flipInY {
+  backface-visibility: visible !important;
+  animation-name: flipInY;
+  animation-duration: 1s;
+}
+
+.opt-anim-enter {
+  transform: perspective(400px) rotate3d(0, 1, 0, 90deg);
+  opacity: 0;
+}
+
+.opt-anim-enter-active {
+  opacity: 0;
+}
+
+.opt-anim-enter-done {
+  backface-visibility: visible !important;
+  animation-name: flipInY;
+  animation-duration: 1s;
+}
+
+.opt-anim-exit {
+  opacity: 1;
+}
+
+.opt-anim-exit-active {
+  opacity: 0;
+  transition: all 0.5s ease-in;
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+
+.zoomIn {
+  animation-name: zoomIn;
+  animation-duration: 0.3s;
+}
+
+/*Animation ends*/
 
 
 
