@@ -1,53 +1,18 @@
 import React, { Component } from 'react';
 import LandingPageBody from './LandingPageBody';
 import GameplayBody from './Gameplay';
-import {getQuestions} from '../../axios/getData';
+import GameOver from './../GameOver';
+//import {getQuestions} from '../../axios/getData';
 
 class BodyContent extends Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            landingPage: true,
-            gameOver: false,
-            data: null,
-            gameplayData:null,
-            genreData: null
-        }
-    }
 
-    componentDidMount(){
-        getQuestions()
-        .then((data)=>{
-            this.setState({
-                data
-            })
-            console.log(this.state.data);
-        })
-    }
-
-    handleChange = (landingPage = false, gameOver = false, genreData = null)=>{
-        if(genreData != null){
-          const gameplayData = this.state.data.filter(e=>e.genreId["0"]===genreData.id);
-            
-          this.setState({
-            landingPage,
-            gameOver,
-            gameplayData,
-            genreData
-          });
-        } else {
-            this.setState({
-                landingPage,
-                gameOver
-            })
-        }
-    }
 
     render(){
         return(
             <React.Fragment>
-                {this.state.landingPage && this.state.data!==null ? <LandingPageBody handleChange = {this.handleChange} />: null}
-                {this.state.gameplayData!==null && !this.state.landingPage ? <GameplayBody data = {this.state.gameplayData} genreData = {this.state.genreData} handleChange = {this.handleChange} />: null}
+                {this.props.data.landingPage && this.props.data.data!==null ? <LandingPageBody changeScore = {this.props.changeScore} handleChange = {this.props.handleChange} />: null}
+                {this.props.data.gameplayData!==null && !this.props.data.landingPage && !this.props.data.gameOver ? <GameplayBody data = {this.props.data.gameplayData} genreData = {this.props.data.genreData} handleChange = {this.props.handleChange} changeScore = {this.props.changeScore} />: null}
+                {this.props.data.gameOver && <GameOver gameOver = {this.props.data.gameOver} />}
             </React.Fragment>
         )
     }

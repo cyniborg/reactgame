@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Carousel from 'nuka-carousel';
 import colours from '../../resources/colours';
 import Hint from './Hint';
+import { CSSTransition } from 'react-transition-group';
 
 
 
@@ -20,7 +21,9 @@ Question.propTypes = {
 };
 
 const Options = (props) => (
-    <div className= {`opt-${props.index}`}>
+    
+
+    <div className= {`opt-${props.index} flipInY`}>
         <div className="option-header" style = {{backgroundColor: props.colour}}>
             <h4>OPTION</h4>
             <p>{props.index+1}<span>/{props.total}</span></p>
@@ -29,9 +32,15 @@ const Options = (props) => (
               {props.optionText}
             </div>
             <div className="submit-button">
-              <button onClick = {(e)=>{props.handleClick(e, false);}}>Select</button>
+              <button className="option-select" onClick = {(e)=>{
+                  props.handleClick(e, false);
+                  props.changeScore(5, false);
+                  }}>
+                  Select
+                  </button>
             </div>
     </div>
+
   );
   
   Options.propTypes = {
@@ -48,16 +57,29 @@ class GameplayBody extends Component{
             totalQuestions: this.props.data.length,
             currentQuestionNumber: 0,
             data: this.props.data,
-            showHint: false
+            showHint: false,
+            inProp: true
         }
+    }
+
+    componentDidUpdate(prevProps, prevState){
+        if(prevState.currentQuestionNumber > this.state.currentQuestionNumber)
+        this.setState(
+            {inProp: true}
+        )
     }
 
     handleClick = (event, hint = false)=>{
         event.preventDefault();
         this.setState((prev,next)=>({
             showHint: !prev.showHint,
-            currentQuestionNumber: hint && prev.currentQuestionNumber<this.state.totalQuestions-1?prev.currentQuestionNumber + 1:prev.currentQuestionNumber
-        }))
+            currentQuestionNumber: hint && prev.currentQuestionNumber<this.state.totalQuestions-1?prev.currentQuestionNumber + 1:prev.currentQuestionNumber,
+            inProp: !prev.inProp
+        }));
+
+        if(this.state.currentQuestionNumber === this.state.totalQuestions-1 && hint){
+            this.props.handleChange(false, true);
+        }
     }
 
     render(){
@@ -65,7 +87,14 @@ class GameplayBody extends Component{
             <React.Fragment>
             { this.state.data===null ? null : 
             <div className="body-gameplay" style = {{backgroundColor:this.props.genreData.colour}}>
+                <CSSTransition
+                in = {this.state.inProp}
+                timeout = {300}
+                classNames = "opt-anim"
+                unmountOnExit
+                >
                 <Question currentQuestionNumber = {this.state.currentQuestionNumber+1} totalQuestions = {this.state.totalQuestions} currentQuestion = { this.props.data[this.state.currentQuestionNumber].questionText} />
+                </CSSTransition>
                 
                 <div className="options">
                     <div className="options-container">
@@ -76,7 +105,17 @@ class GameplayBody extends Component{
                         heightMode = 'max'
                          >
                         {this.state.data[this.state.currentQuestionNumber].options.map((e,i)=>(
-                            <Options key = {i} index = {i} colour = {i>=colours.options.length?colours.options[i%colours.options.length]:colours.options[i]} total = {this.state.data[this.state.currentQuestionNumber].options.length} optionText = {e} handleClick = {this.handleClick} />
+                            <CSSTransition
+                            key = {i}
+                            in = {this.state.inProp}
+                            timeout = {300}
+                            classNames = "opt-anim"
+                            unmountOnExit
+                            >
+
+                            <Options key = {i} index = {i} colour = {i>=colours.options.length?colours.options[i%colours.options.length]:colours.options[i]} total = {this.state.data[this.state.currentQuestionNumber].options.length} optionText = {e} handleClick = {this.handleClick} changeScore = {this.props.changeScore} />
+                            
+                            </CSSTransition>
                         ))}
                         </Carousel>
                     </div>
@@ -85,19 +124,14 @@ class GameplayBody extends Component{
                 <div className="img-gameplay"><img className = "img-responsive" src={this.props.genreData.image} alt="image" /></div>
             </div>
             }
-            {this.state.showHint && <Hint hint = {this.state.data[this.state.currentQuestionNumber].hint} handleClick = {this.handleClick} />}
+            
+
+            {this.state.showHint && <Hint showHint = {this.state.showHint} hint = {this.state.data[this.state.currentQuestionNumber].hint} handleClick = {this.handleClick} />
+            }
+            
             </React.Fragment>
         )
     }
 }
 
 export default GameplayBody;
-
-/*<Question currentQuestionNumber = {this.state.currentQuestionNumber} totalQuestions = {this.state.totalQuestions} currentQuestion = { this.state.data[this.state.currentQuestionNumber].question} />
-        <div className="options">
-            <div className="options-container">
-                <Carousel>
-                  <Options />
-                </Carousel>
-            </div>
-        </div>*/

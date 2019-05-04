@@ -3,7 +3,10 @@ import {getGenre} from '../../axios/getData';
 import PropTypes from 'prop-types';
 
 const LandingPageSection = (props)=>(
-    <div className={`section-${props.count}`} style = {{backgroundColor:props.colour}} onClick = {()=>{props.handleChange(false, false, {'id': props.id, 'colour': props.colour, 'image': props.img})}}>
+    <div className={`section-${props.count}`} style = {{backgroundColor:props.colour}} onClick = {()=>{
+        props.handleChange(false, false, {'id': props.id, 'colour': props.colour, 'image': props.img, 'name':props.name});
+        props.changeScore(0, false);
+        }}>
         <div className="landing-text">
         {props.name}
         </div>
@@ -42,9 +45,9 @@ class LandingPageBody extends Component{
         return(
             <div className="body-landing">
                 {this.state.genre.length>0 && this.state.genre.map((e,i)=>{
-                    return <LandingPageSection key = {e.id} count={i} name = {e.name} colour = {e.genreColour} img = {e.genreImage} id = {e.id} handleChange = {this.props.handleChange} />;
+                    return <LandingPageSection key = {e.id} count={i} name = {e.name} colour = {e.genreColour} img = {e.genreImage} id = {e.id} handleChange = {this.props.handleChange} changeScore = {this.props.changeScore} />;
                     })}
-            </div>
+            </div> 
         )
     }
 }
