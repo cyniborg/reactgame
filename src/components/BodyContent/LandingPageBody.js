@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {getGenre} from '../../axios/getData';
 import PropTypes from 'prop-types';
 
 const LandingPageSection = (props)=>(
@@ -8,7 +7,7 @@ const LandingPageSection = (props)=>(
         props.changeScore(0, false);
         }}>
         <div className="landing-text">
-        {props.name}
+        <h3>{props.name}</h3>
         </div>
         <div className="landing-box-img">
         <img className="img-responsive" src={props.img} alt={props.name + "image"} />
@@ -25,26 +24,12 @@ LandingPageSection.propTypes = {
 }
 
 class LandingPageBody extends Component{ 
-    constructor(props){
-        super(props);
-        this.state = {
-            genre: [],
-        }
-    }
-    componentDidMount(){
-       getGenre()
-       .then((genre)=>{
-           this.setState({
-               genre
-           });
-       })
-       .catch(err=>console.log(err));
-    }
+    
 
     render(){
         return(
-            <div className="body-landing">
-                {this.state.genre.length>0 && this.state.genre.map((e,i)=>{
+            <div className="body-landing slideInDown">
+                {this.props.genre.length>0 && this.props.genre.map((e,i)=>{
                     return <LandingPageSection key = {e.id} count={i} name = {e.name} colour = {e.genreColour} img = {e.genreImage} id = {e.id} handleChange = {this.props.handleChange} changeScore = {this.props.changeScore} />;
                     })}
             </div> 
