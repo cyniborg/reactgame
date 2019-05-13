@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:8080",
+  "homepage": "https://byteit.eu/demo/shedidit",
   "dependencies": {
     "axios": "^0.18.0",
     "nuka-carousel": "^4.5.4",
