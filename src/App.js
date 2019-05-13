@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import './App.css';
 import Header from './components/Header';
 import BodyContent from './components/BodyContent/BodyContent';
 import Footer from './components/Footer';
-import {getQuestions} from './axios/getData';
+import {getQuestions, getGenre} from './axios/getData';
 
 class App extends Component {
   constructor(props){
@@ -13,30 +12,54 @@ class App extends Component {
       landingPage: true,
       gameOver: false,
       data: null,
+      genre: [],
       gameplayData:null,
       genreData: null
     }
+    this.initialState = {
+      score:0,
+      landingPage: true,
+      gameOver: false,
+    }
   }
   componentDidMount(){
-    getQuestions()
-    .then((data)=>{
-        this.setState({
-            data
-        })
-        console.log(this.state);
-    })
+    if(this.state.data===null){
+
+      getQuestions()
+      .then((data)=>{
+          this.setState({
+              data
+          })
+      })
+      .catch((err)=>{console.log(err)})
+    }
+
+    if(this.state.genre.length<1){
+      getGenre()
+      .then((genre)=>{
+          this.setState({
+              genre
+          });
+      })
+      .catch(err=>console.log(err));
   }
+  }
+
+  resetGame = ()=>{
+    this.setState({...this.initialState})
+  }
+
   changeScore = (score=0, landingPage = true)=>{
     this.setState((prev, next)=>(
       {
-        score: score>0?prev.score + score:prev.score,
+        score: score>0?parseInt(prev.score + score):prev.score,
         landingPage: landingPage===false?false:true
       }
     ))
   }
 
   handleChange = (landingPage = this.state.landingPage, gameOver = this.state.gameOver, genreData = this.state.genreData)=>{
-    console.log("handle change called");
+    
     if(genreData != null){
       const gameplayData = this.state.data.filter(e=>e.genreId["0"]===genreData.id);
         
@@ -56,8 +79,8 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        <Header score = {this.state.score} landingPage = {this.state.landingPage} genre = {this.state.genreData!==null?this.state.genreData:null} />
-        <BodyContent changeScore = {this.changeScore} data = {this.state} handleChange = {this.handleChange} />
+        <Header score = {this.state.score} landingPage = {this.state.landingPage} genre = {this.state.genreData!==null?this.state.genreData:null} gameOver = {this.state.gameOver} />
+        {this.state.genre.length>1 && <BodyContent genre = {this.state.genre} changeScore = {this.changeScore} data = {this.state} handleChange = {this.handleChange} resetGame = {this.resetGame} />}
         <Footer />
       </div>
     );
