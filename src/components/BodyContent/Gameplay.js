@@ -11,7 +11,7 @@ import { CSSTransition } from 'react-transition-group';
 
 const Question = (props)=>(
     <div className="question">
-            <p>Question {props.currentQuestionNumber}/{props.totalQuestions}</p>
+            <p>Vraag {props.currentQuestionNumber}/{props.totalQuestions}</p>
             <p>{props.currentQuestion}</p>
         </div>
 );
@@ -27,7 +27,7 @@ const Options = (props) => (
 
     <div className= {`opt-${props.index} flipInY`}>
         <div className="option-header" style = {{backgroundColor: props.colour}}>
-            <p>OPTION</p>
+            <p>Optie</p>
             <p className= "option-number">{props.index+1}<span>/{props.total}</span></p>
         </div>
             <div className="option-content">
@@ -88,7 +88,6 @@ class GameplayBody extends Component{
     
     checkWidth = ()=>{
         this.setState({windowWidth: window.innerWidth});
-        this.forceUpdate();
     }
     
     componentDidMount(){
