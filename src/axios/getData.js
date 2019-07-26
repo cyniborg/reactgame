@@ -7,7 +7,11 @@ function getGenre(){
         url:process.env.REACT_APP_GENRE_URL
     })
     .then(function (response) {
-        const genre = response.data.map((e)=>({id: e.id, name: e.name, "genreColour": e.genre_colour, "genreImage": e.genre_image.guid}));
+        const genre = response.data.map((e)=>({id: e.id, name: e.name, "genreColour": e.genre_colour, "genreImage": e.genre_image.guid, "genreOrder": e.genre_order})).sort((a, b)=>{
+            const orderA = a.genreOrder || 0;
+            const orderB = b.genreOrder || 0;
+            return orderA - orderB;
+        });
         return genre;
     });
 }
